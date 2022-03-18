@@ -1,0 +1,11 @@
+{
+    "/assets/*": {
+        "target": "http://localhost:88",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "headers": {
+            "Connection": "keep-alive"
+            }
+    }
+}
