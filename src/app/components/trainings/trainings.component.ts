@@ -2,21 +2,30 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { booking_event, GetEventsOfTrainingService } from 'app/services/api/get-events-of-training.service';
 import { GetReferrerService } from 'app/services/api/get-referrer.service';
 import { GetTrainingsService, training } from 'app/services/api/get-trainings.service';
+import { HelperFunctionsService } from 'app/services/helper-functions.service';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-declare interface TableData {
-  headerRow: string[];
-  dataRows: string[][];
-}
+// declare interface TableData {
+//   headerRow: string[];
+//   dataRows: string[][];
+// }
 declare interface TableTrainingsData {
   headerRow: string[];
-  // dataRows: Observable<training_table_row[]>;
   dataRows: BehaviorSubject<training_table_row[]>;
 }
 
 interface training_table_row extends training {
   referrer: string
+}
+
+declare interface TableEventsData{
+  headerRow: string[],
+  dataRows: BehaviorSubject<booking_event_row[]>;
+}
+
+interface booking_event_row extends booking_event {
+  training_name: string
 }
 
 @Component({
@@ -26,20 +35,21 @@ interface training_table_row extends training {
 })
 export class TrainingsComponent implements OnInit, OnDestroy {
   // VARS
-  public tableTrainings: TableData;
-  public tableTrainings2: TableTrainingsData;
+  // public tableTrainings: TableData;
+  public tableTrainings: TableTrainingsData;
+  public tableEvents: TableEventsData;
 
-  public myTableDataObservable = new BehaviorSubject(null);
+  // public myTableDataObservable = new BehaviorSubject(null);
   // public myTableDataObservable : Subscription;
 
   constructor(
     public getTrainingsService: GetTrainingsService,
     public getEventsOfTrainingService: GetEventsOfTrainingService,
-    public getReferrerService: GetReferrerService
+    public getReferrerService: GetReferrerService,
+    public helper: HelperFunctionsService
   ) 
   { 
 
-    // this.tableTrainings2.dataRows = new BehaviorSubject(null);
   }
 
 
@@ -47,8 +57,6 @@ export class TrainingsComponent implements OnInit, OnDestroy {
   {
     this.getTrainingsService.call();
     
-
-
     this.getTrainingsService.call_as_observerable().subscribe((callback:Array<training>) => {
       console.log("> trainings(2) ",callback)
     });
@@ -67,29 +75,18 @@ export class TrainingsComponent implements OnInit, OnDestroy {
       
     })
 
-    this.initTable();
+    this.initTrainingTable();
+    this.initEventTable();
   }
 
   ngOnDestroy(): void {
     
   }
 
-  initTable()
+  initTrainingTable()
   {
     this.tableTrainings = {
-        headerRow: [ 'ID', 'Name', 'Beschreibung', 'Dozent', 'Preis'],
-        dataRows: [
-            ['1', 'Dakota Rice', 'Niger', 'Oud-Turnhout', '$36,738'],
-            ['2', 'Minerva Hooper', 'Curaçao', 'Sinaai-Waas', '$23,789'],
-            ['3', 'Sage Rodriguez', 'Netherlands', 'Baileux', '$56,142'],
-            ['4', 'Philip Chaney', 'Korea, South', 'Overland Park', '$38,735'],
-            ['5', 'Doris Greene', 'Malawi', 'Feldkirchen in Kärnten', '$63,542'],
-            ['6', 'Mason Porter', 'Chile', 'Gloucester', '$78,615']
-        ]
-    };
-    this.tableTrainings2 = {
-      headerRow: [ 'ID', 'Name', 'Beschreibung', 'Dozent', 'Preis'],
-      // dataRows: this.myTableDataObservable.asObservable()
+      headerRow: [ 'ID', 'Name', 'Beschreibung', 'Dozent', 'Preis' , 'Buchen'],
       dataRows: new BehaviorSubject(null)
     }
     // this.tableTrainings.dataRows = this.getTrainingsService.test_trainings
@@ -113,11 +110,52 @@ export class TrainingsComponent implements OnInit, OnDestroy {
     )
     .subscribe( (callback:training_table_row[]) =>{
       console.log("> trainings(3) ",callback);
-      this.myTableDataObservable.next(callback);
-      this.tableTrainings2.dataRows.next(callback);
+      // this.myTableDataObservable.next(callback);
+      this.tableTrainings.dataRows.next(callback);
     })
   }
 
-  
+  initEventTable()
+  {
+    this.tableEvents = {
+      headerRow: [ 'ID', 'Datum', 'Schulung', 'Max Teilnehmer'],
+      dataRows: new BehaviorSubject(null)
+    }
+    this.tableTrainings.dataRows.subscribe((training_table_data:training_table_row[]) => {
+      let newDataRows : booking_event_row[] = [];
+      for (const key in training_table_data) 
+      {
+        if (Object.prototype.hasOwnProperty.call(training_table_data, key)) {
+          const row = training_table_data[key];
+          // console.log("row ",row);
+
+          this.getEventsOfTrainingService.call_as_observerable(row.training_id)
+          .pipe
+          (
+            map( (_booking_events:Array<booking_event>) => {
+              _booking_events
+              .map(async (event_row:booking_event_row)=>{
+                event_row.training_name = row.name;
+                event_row.date = this.helper.germanDateFormatWithTime(new Date(event_row.date))
+                return event_row;
+              })
+              return _booking_events;
+            })
+            
+          )
+          .subscribe( (callback:booking_event_row[]) => {
+            console.log("> event(3) ",callback);
+            newDataRows = newDataRows.concat(callback);
+            this.tableEvents.dataRows.next(newDataRows);
+          })
+        }
+      }
+    })
+  }
+
+  book_training(training_id:number)
+  {
+    console.log("book_training ",training_id)
+  }
 
 }

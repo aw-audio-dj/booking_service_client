@@ -11,14 +11,14 @@
                           <table class="table table-hover table-striped">
                                 <thead>
                                     <tr>
-                                        <th *ngFor="let cell of tableTrainings2.headerRow">{{ cell }}</th>
+                                        <th *ngFor="let cell of tableTrainings.headerRow">{{ cell }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <!-- <tr *ngFor="let row of tableData1.dataRows">
                                         <td *ngFor="let cell of row">{{cell}}</td>
                                     </tr> -->
-                                    <tr *ngFor="let row of tableTrainings2.dataRows | async">
+                                    <tr *ngFor="let row of tableTrainings.dataRows | async">
                                         <!-- <td *ngFor="let cell of row">{{cell}}</td> -->
                                         <td>{{row.training_id}}</td>
                                         <td>{{row.name}}</td>
@@ -26,35 +26,45 @@
                                         <!-- <td>{{row.referrer_id}}</td> -->
                                         <td>{{row.referrer}}</td>
                                         <td>{{row.price}} €</td>
+                                        <td><button type="button" (click)="book_training(row.training_id)" class="btn btn-info btn-fill pull-right">Buchen</button></td>
                                     </tr>
                                 </tbody>
                           </table>
 
                     </div>
                 </div>
-            </div>
-            <!-- <div class="col-md-12">
-                <div class="card card-plain">
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
                     <div class="header">
-                        <h4 class="title">Table on Plain Background</h4>
-                        <p class="category">Here is a subtitle for this table</p>
+                        <h4 class="title">Veranstaltungen </h4>
+                        <p class="category">Eine Übersicht der Schulungs-Termine</p>
                     </div>
                     <div class="content table-responsive table-full-width">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th *ngFor="let cell of tableData2.headerRow">{{ cell }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let row of tableData2.dataRows">
-                                    <td *ngFor="let cell of row">{{cell}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                          <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let cell of tableEvents.headerRow">{{ cell }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- <tr *ngFor="let row of tableData1.dataRows">
+                                        <td *ngFor="let cell of row">{{cell}}</td>
+                                    </tr> -->
+                                    <tr *ngFor="let row of tableEvents.dataRows | async">
+                                        <td>{{row.event_id}}</td>
+                                        <td>{{row.date}}</td>
+                                        <td>{{row.training_name}}</td>
+                                        <td>{{row.maxAttendees}}</td>
+                                    </tr>
+                                </tbody>
+                          </table>
+
                     </div>
                 </div>
-            </div> -->
+            </div>            
         </div>
     </div>
 </div>
