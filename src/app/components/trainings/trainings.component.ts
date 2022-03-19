@@ -97,7 +97,11 @@ export class TrainingsComponent implements OnInit, OnDestroy {
       dataRows: new BehaviorSubject(null)
     }
     // this.tableTrainings.dataRows = this.getTrainingsService.test_trainings
+    this.updateTrainingTable();
+  }
 
+  updateTrainingTable()
+  {
     this.getTrainingsService.call_as_observerable()
     .pipe
     (
@@ -128,6 +132,11 @@ export class TrainingsComponent implements OnInit, OnDestroy {
       headerRow: [ 'ID', 'Datum', 'Schulung', 'Max Teilnehmer' , 'Freie Plätze' , 'Buchen'],
       dataRows: new BehaviorSubject(null)
     }
+    this.updateEventTable();
+  }
+
+  updateEventTable()
+  {
     this.tableTrainings.dataRows.subscribe((training_table_data:training_table_row[]) => {
       let newDataRows : booking_event_row[] = [];
       for (const key in training_table_data) 
@@ -161,12 +170,12 @@ export class TrainingsComponent implements OnInit, OnDestroy {
     })
   }
 
-  book_training(event_id:number)
+  book_event(event_id:number)
   {
-    console.log("book_training ",event_id);
+    // console.log("book_training ",event_id);
     this.putBookingService.call_as_observerable(event_id)
     .subscribe((callback: putBookingCallback) => {
-      console.log("put_booking ",callback);
+      // console.log("put_booking ",callback);
       if(callback.message.includes("insert booking successful"))
       {
         this.notificationService.showNotification('bottom','center', 'Buchung erfolgreich!');
@@ -175,7 +184,7 @@ export class TrainingsComponent implements OnInit, OnDestroy {
       {
         this.notificationService.showNotification('bottom','center', 'Buchung fehlgeschlagen!');
       }
-      this.initEventTable();
+      this.updateEventTable();
     })
   }
 
