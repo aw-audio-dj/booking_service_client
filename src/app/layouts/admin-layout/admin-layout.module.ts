@@ -8,14 +8,15 @@ import { NguiMapModule} from '@ngui/map';
 
 import { AdminLayoutRoutes } from './admin-layout.routing';
 
-import { HomeComponent } from '../../home/home.component';
-import { UserComponent } from '../../user/user.component';
-import { TablesComponent } from '../../tables/tables.component';
-import { TypographyComponent } from '../../typography/typography.component';
-import { IconsComponent } from '../../icons/icons.component';
-import { MapsComponent } from '../../maps/maps.component';
-import { NotificationsComponent } from '../../notifications/notifications.component';
-import { UpgradeComponent } from '../../upgrade/upgrade.component';
+import { HomeComponent } from '../../framework_components/home/home.component';
+import { UserComponent } from '../../framework_components/user/user.component';
+import { TablesComponent } from '../../framework_components/tables/tables.component';
+import { TypographyComponent } from '../../framework_components/typography/typography.component';
+import { IconsComponent } from '../../framework_components/icons/icons.component';
+import { MapsComponent } from '../../framework_components/maps/maps.component';
+import { NotificationsComponent } from '../../framework_components/notifications/notifications.component';
+import { UpgradeComponent } from '../../framework_components/upgrade/upgrade.component';
+import { TrainingsComponent } from 'app/components/trainings/trainings.component';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { UpgradeComponent } from '../../upgrade/upgrade.component';
     NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=YOUR_KEY_HERE'})
   ],
   declarations: [
+    TrainingsComponent,
     HomeComponent,
     UserComponent,
     TablesComponent,
@@ -35,6 +37,7 @@ import { UpgradeComponent } from '../../upgrade/upgrade.component';
     MapsComponent,
     NotificationsComponent,
     UpgradeComponent
+    
   ]
 })
 
