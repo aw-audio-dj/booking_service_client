@@ -15,7 +15,8 @@ export enum api_calls{
   putBooking = "putBooking",
   putEvent = "putEvent",
   putTraining = "putTraining",
-  getReferrer = "getReferrer"
+  getReferrer = "getReferrer",
+  getBookings = "getBookings"
 }
 export enum response_type{
   TEXT = "text",

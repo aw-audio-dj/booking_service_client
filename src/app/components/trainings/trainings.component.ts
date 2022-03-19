@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { GetBookingsService } from 'app/services/api/get-bookings.service';
 import { booking_event, GetEventsOfTrainingService } from 'app/services/api/get-events-of-training.service';
 import { GetReferrerService } from 'app/services/api/get-referrer.service';
 import { GetTrainingsService, training } from 'app/services/api/get-trainings.service';
+import { putBookingCallback, PutBookingService } from 'app/services/api/put-booking.service';
 import { HelperFunctionsService } from 'app/services/helper-functions.service';
+import { NotificationService } from 'app/services/notification.service';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -25,7 +28,8 @@ declare interface TableEventsData{
 }
 
 interface booking_event_row extends booking_event {
-  training_name: string
+  training_name: string,
+  free_bookings: number
 }
 
 @Component({
@@ -46,6 +50,9 @@ export class TrainingsComponent implements OnInit, OnDestroy {
     public getTrainingsService: GetTrainingsService,
     public getEventsOfTrainingService: GetEventsOfTrainingService,
     public getReferrerService: GetReferrerService,
+    public putBookingService: PutBookingService,
+    public getBookingsService: GetBookingsService,
+    public notificationService: NotificationService,
     public helper: HelperFunctionsService
   ) 
   { 
@@ -86,7 +93,7 @@ export class TrainingsComponent implements OnInit, OnDestroy {
   initTrainingTable()
   {
     this.tableTrainings = {
-      headerRow: [ 'ID', 'Name', 'Beschreibung', 'Dozent', 'Preis' , 'Buchen'],
+      headerRow: [ 'ID', 'Name', 'Beschreibung', 'Dozent', 'Preis'],
       dataRows: new BehaviorSubject(null)
     }
     // this.tableTrainings.dataRows = this.getTrainingsService.test_trainings
@@ -118,7 +125,7 @@ export class TrainingsComponent implements OnInit, OnDestroy {
   initEventTable()
   {
     this.tableEvents = {
-      headerRow: [ 'ID', 'Datum', 'Schulung', 'Max Teilnehmer'],
+      headerRow: [ 'ID', 'Datum', 'Schulung', 'Max Teilnehmer' , 'Freie Plätze' , 'Buchen'],
       dataRows: new BehaviorSubject(null)
     }
     this.tableTrainings.dataRows.subscribe((training_table_data:training_table_row[]) => {
@@ -136,7 +143,8 @@ export class TrainingsComponent implements OnInit, OnDestroy {
               _booking_events
               .map(async (event_row:booking_event_row)=>{
                 event_row.training_name = row.name;
-                event_row.date = this.helper.germanDateFormatWithTime(new Date(event_row.date))
+                event_row.date = this.helper.germanDateFormatWithTime(new Date(event_row.date));
+                event_row.free_bookings = event_row.maxAttendees - await (await this.getBookingsService.call_as_observerable(event_row.event_id).toPromise()).length;
                 return event_row;
               })
               return _booking_events;
@@ -153,9 +161,22 @@ export class TrainingsComponent implements OnInit, OnDestroy {
     })
   }
 
-  book_training(training_id:number)
+  book_training(event_id:number)
   {
-    console.log("book_training ",training_id)
+    console.log("book_training ",event_id);
+    this.putBookingService.call_as_observerable(event_id)
+    .subscribe((callback: putBookingCallback) => {
+      console.log("put_booking ",callback);
+      if(callback.message.includes("insert booking successful"))
+      {
+        this.notificationService.showNotification('bottom','center', 'Buchung erfolgreich!');
+      }
+      else
+      {
+        this.notificationService.showNotification('bottom','center', 'Buchung fehlgeschlagen!');
+      }
+      this.initEventTable();
+    })
   }
 
 }
