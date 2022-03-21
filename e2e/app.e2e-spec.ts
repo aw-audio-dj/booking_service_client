@@ -1,14 +1,14 @@
-import { LbdFreeAngularcliPage } from './app.po';
+import { MaterialDashboardAngularPage } from './app.po';
 
-describe('lbd-free-angularcli App', function() {
-  let page: LbdFreeAngularcliPage;
+describe('material-dashboard-angular App', () => {
+  let page: MaterialDashboardAngularPage;
 
   beforeEach(() => {
-    page = new LbdFreeAngularcliPage();
+    page = new MaterialDashboardAngularPage();
   });
 
-  it('should display message saying app works', () => {
+  it('should display message saying app works', async () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    expect(await page.getParagraphText()).toEqual('app works!');
   });
 });

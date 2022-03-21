@@ -1,0 +1,70 @@
+
+<div class="panel-header panel-header-sm">
+</div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="title">Schulungen</h4>
+          <p class="category">Eine Übersicht der angebotenen Schulungen</p>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th *ngFor="let cell of tableTrainings.headerRow">{{ cell }}</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of tableTrainings.dataRows | async">
+                    <!-- <td *ngFor="let cell of row">{{cell}}</td> -->
+                    <td>{{row.training_id}}</td>
+                    <td>{{row.name}}</td>
+                    <td>{{row.description}}</td>
+                    <!-- <td>{{row.referrer_id}}</td> -->
+                    <td>{{row.referrer}}</td>
+                    <td>{{row.price}} €</td>
+                    <td><button type="button" (click)="new_event(row.training_id)" class="btn btn-info btn-fill pull-left">Weiteren Termin</button></td>
+                    <!-- <td><new-event-modal></new-event-modal></td> -->
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Veranstaltungen -->
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="title">Veranstaltungen </h4>
+          <p class="category">Eine Übersicht der Schulungs-Termine</p>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th *ngFor="let cell of tableEvents.headerRow">{{ cell }}</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of tableEvents.dataRows | async">
+                    <td>{{row.event_id}}</td>
+                    <td>{{row.date}}</td>
+                    <td>{{row.training_name}}</td>
+                    <td>{{row.maxAttendees}}</td>
+                    <td>{{row.free_bookings}}</td>
+                    <td><button type="button" (click)="book_event(row.event_id)" class="btn btn-info btn-fill pull-left">Buchen</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+

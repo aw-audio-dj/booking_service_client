@@ -9,14 +9,14 @@ export let connectionSettings = {
 }
 
 export enum api_calls{
-  getEventsOfTraining = "getEventsOfTraining",
-  getTrainingsBetweenDates = "getTrainingsBetweenDates",
-  getTrainings = "getTrainings",
-  putBooking = "putBooking",
-  putEvent = "putEvent",
-  putTraining = "putTraining",
-  getReferrer = "getReferrer",
-  getBookings = "getBookings"
+  getEventsOfTraining = "eventsOfTraining",
+  getTrainingsBetweenDates = "trainingsBetweenDates",
+  getTrainings = "trainings",
+  putBooking = "booking",
+  putEvent = "event",
+  putTraining = "training",
+  getReferrer = "referrer",
+  getBookings = "bookings"
 }
 export enum response_type{
   TEXT = "text",
