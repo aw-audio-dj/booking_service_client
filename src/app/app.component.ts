@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { LocationStrategy, PlatformLocation, Location } from '@angular/common';
-import { NgbConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-root',
@@ -10,8 +9,7 @@ import { NgbConfig } from '@ng-bootstrap/ng-bootstrap';
 export class AppComponent implements OnInit {
 
      constructor(
-       public location: Location, 
-       public ngbConfig: NgbConfig
+       public location: Location
       ) 
       {
         // ngbConfig.animation = false;

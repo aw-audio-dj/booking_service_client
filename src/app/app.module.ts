@@ -9,7 +9,6 @@ import { FooterModule } from './shared/footer/footer.module';
 import { SidebarModule } from './sidebar/sidebar.module';
 import { AppComponent } from './app.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { CdkTableModule } from '@angular/cdk/table';
 import { MatIconModule } from '@angular/material/icon' ;
@@ -104,7 +103,6 @@ const ngMaterialModules = [
     FooterModule,
     SidebarModule,
     AppRoutingModule,
-    NgbModule,
     ngMaterialModules
   ],
   exports:[

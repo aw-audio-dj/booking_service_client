@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild, EventEmitter, Output, AfterViewInit, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import {NgbModal, ModalDismissReasons, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 declare var $:any;
 
 declare interface ModalTexte {
@@ -20,7 +20,7 @@ export class NewEventModal2 implements OnInit, AfterViewInit
 {
     // @Input() header;
     // @Input() text;
-    @ViewChild('modal',{static: false}) modal: NgbModal;
+    // @ViewChild('modal',{static: false}) modal: NgbModal;
     // @ViewChild('cancelBtn',{static: false}) cancelBtn: ElementRef;
     // @ViewChild('okBtn',{static: false}) okBtn: ElementRef;
     // @ViewChild('iconRow',{static: false}) iconRow: ElementRef;
@@ -39,12 +39,13 @@ export class NewEventModal2 implements OnInit, AfterViewInit
       okBtn: "Ok",
       cancelBtn: "Cancel"
     }
+    public anlegenForm: FormGroup;
     
 
     // private userInputFormGroup: FormGroup;
     constructor(
       public dialogRef: MatDialogRef<NewEventModal2>,
-      public activeModal: NgbActiveModal, 
+      private fb: FormBuilder,
     ) 
     {
 
@@ -52,7 +53,9 @@ export class NewEventModal2 implements OnInit, AfterViewInit
     }
 
     ngOnInit(): void {
+      this.initForms();
       this.onInit.emit(this);
+      
     }
 
     ngAfterViewInit(): void 
@@ -61,16 +64,29 @@ export class NewEventModal2 implements OnInit, AfterViewInit
     }
 
 
+    initForms()
+    {
+      this.anlegenForm = this.fb.group({
+        versammlungsbeginn: [{hour: 13, minute: 30, second: 0} ],
+        versammlungsdatum: [new Date().toLocaleDateString() ],
+      });
+      const today = new Date();
+      this.anlegenForm['versammlungsbeginn'] = {hour: today.getHours(), minute: today.getMinutes(), second: today.getSeconds()};
+      setTimeout(() => {
+        this.anlegenForm.get('versammlungsdatum').setValue(new Date().toLocaleDateString());
+      }, 500);
+    }
 
     public ok_click()
     {
-        this.afterOkpressed.emit(this);   
+        this.afterOkpressed.emit(this);
+        this.dialogRef.close();   
     }
 
     public cancel_click(modal: NewEventModal2)
     {
         this.afterCancelpressed.emit(this);
-        // this.dialogRef.close();   
+        this.dialogRef.close();   
         // modal.dismiss('Cross click')     
     }
   
