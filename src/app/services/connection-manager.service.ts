@@ -1,7 +1,13 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-export let connectionSettings = {
+export interface ConnectionSettings{
+  server : {
+    url: string,
+    port: number
+  }
+}
+export let connectionSettings: ConnectionSettings = {
   server: {
     url : "http://localhost",
     port: 3010
@@ -38,7 +44,7 @@ export enum crud{
 })
 export class ConnectionManagerService {
 
-  constructor() 
+  constructor()
   {
 
   }
@@ -46,6 +52,10 @@ export class ConnectionManagerService {
   getApiServerPath():string
   {
     return connectionSettings.server.url+":"+connectionSettings.server.port
+  }
+  getConnectionSettings():ConnectionSettings
+  {
+    return connectionSettings;
   }
 
   public createHttpHeader(contentType:string = null, method:string = null): HttpHeaders

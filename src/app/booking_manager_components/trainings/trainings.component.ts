@@ -1,11 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ModalData, NewEventModal } from 'src/app/modals/new-event/new-event.component';
 import { GetBookingsService } from 'src/app/services/api/get-bookings.service';
 import { booking_event, GetEventsOfTrainingService } from 'src/app/services/api/get-events-of-training.service';
 import { GetReferrerService } from 'src/app/services/api/get-referrer.service';
 import { training, GetTrainingsService } from 'src/app/services/api/get-trainings.service';
 import { PutBookingService, putBookingCallback } from 'src/app/services/api/put-booking.service';
+import { putEventCallback, PutEventService } from 'src/app/services/api/put-event.service';
+import { PutTrainingService } from 'src/app/services/api/put-training.service';
 import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
 import { NotificationService } from 'src/app/services/notification.service';
 
@@ -56,7 +60,9 @@ export class TrainingsComponent implements OnInit, OnDestroy {
     public getReferrerService: GetReferrerService,
     public putBookingService: PutBookingService,
     public getBookingsService: GetBookingsService,
+    public putEventService: PutEventService,
     public notificationService: NotificationService,
+    public modalService: NgbModal,
     public helper: HelperFunctionsService
   )
   {
@@ -66,25 +72,25 @@ export class TrainingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void
   {
-    this.getTrainingsService.call();
+    // this.getTrainingsService.call();
 
-    this.getTrainingsService.call_as_observerable().subscribe((callback:Array<training>) => {
-      console.log("> trainings(2) ",callback)
-    });
+    // this.getTrainingsService.call_as_observerable().subscribe((callback:Array<training>) => {
+    //   console.log("> trainings(2) ",callback)
+    // });
 
-    this.getEventsOfTrainingService.call(1);
-    this.getEventsOfTrainingService.call_as_observerable(1).subscribe((callback:Array<booking_event>) => {
-      try
-      {
-        console.log("> event(s)2 ",callback);
-      }
-      catch (error)
-      {
-        console.log(error)
-      }
+    // this.getEventsOfTrainingService.call(1);
+    // this.getEventsOfTrainingService.call_as_observerable(1).subscribe((callback:Array<booking_event>) => {
+    //   try
+    //   {
+    //     console.log("> event(s)2 ",callback);
+    //   }
+    //   catch (error)
+    //   {
+    //     console.log(error)
+    //   }
 
 
-    })
+    // })
 
     this.initTrainingTable();
     this.initEventTable();
@@ -116,16 +122,12 @@ export class TrainingsComponent implements OnInit, OnDestroy {
           const referrer_ = await this.getReferrerService.call_as_observerable(training_row.referrer_id).toPromise();
           // console.log("|||| ",referrer_);
           training_row.referrer = referrer_[0].surname+" "+referrer_[0].lastname;
-          // await this.getReferrerService.call_as_promise(tr.referrer_id).then(d=>{console.log("||||| ",d)})
           return training_row;
         })
-        // tr.referrer = "test";console.log("tr ",tr);
         return _trainings;
       })
     )
-    .subscribe( (callback:training_table_row[]) =>{
-      console.log("> trainings(3) ",callback);
-      // this.myTableDataObservable.next(callback);
+    .subscribe( (callback:training_table_row[]) =>{;
       this.tableTrainings.dataRows.next(callback);
     })
   }
@@ -147,8 +149,6 @@ export class TrainingsComponent implements OnInit, OnDestroy {
       {
         if (Object.prototype.hasOwnProperty.call(training_table_data, key)) {
           const row = training_table_data[key];
-          // console.log("row ",row);
-
           this.getEventsOfTrainingService.call_as_observerable(row.training_id)
           .pipe
           (
@@ -165,7 +165,7 @@ export class TrainingsComponent implements OnInit, OnDestroy {
 
           )
           .subscribe( (callback:booking_event_row[]) => {
-            console.log("> event(3) ",callback);
+            // console.log("> event(3) ",callback);
             newDataRows = newDataRows.concat(callback);
             this.tableEvents.dataRows.next(newDataRows);
           })
@@ -176,11 +176,29 @@ export class TrainingsComponent implements OnInit, OnDestroy {
 
   new_event(training_id:number)
   {
-    // this.new_event_modal.open({});
-
-
-
-
+    const modalRef = this.modalService.open(NewEventModal);
+    let modalData : ModalData = {training_id: training_id}
+    modalRef.componentInstance.data = modalData;
+    modalRef.componentInstance.afterOkpressed.subscribe( async (modal:NewEventModal) => {
+      let training_date = new Date();
+      training_date.setFullYear(modal.anlegenForm.controls.versammlungsdatum.value.year)
+      training_date.setMonth(modal.anlegenForm.controls.versammlungsdatum.value.month-1)
+      training_date.setDate(modal.anlegenForm.controls.versammlungsdatum.value.day)
+      // console.log("ok pressed ", (modal.anlegenForm.controls.versammlungsdatum.value) , training_date)
+      let putEventCallback: putEventCallback = await this.putEventService.call_as_observerable(training_id,training_date).toPromise();
+      console.log("putEventCallback ",putEventCallback)
+      if(putEventCallback.message.includes("insert event successful"))
+      {
+        // Sucesss
+        this.notificationService.showNotification('bottom','center', 'Neuer Schulungs-Termin angelegt!',2);
+      }
+      else
+      {
+        // Error
+        this.notificationService.showNotification('bottom','center', 'Aktion verlief fehlerhaft!',4);
+      }
+      this.updateEventTable();
+    })
   }
 
   book_event(event_id:number)

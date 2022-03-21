@@ -15,6 +15,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { UpgradeComponent } from '../../framework_components/upgrade/upgrade.component';
 import { TrainingsComponent } from 'src/app/booking_manager_components/trainings/trainings.component';
+import { ModalsModule } from 'src/app/modals/modals.module';
+// import { ModalsModule } from 'src/app/modals/modals.module';
 
 @NgModule({
   imports: [
@@ -23,6 +25,7 @@ import { TrainingsComponent } from 'src/app/booking_manager_components/trainings
     FormsModule,
     NgChartsModule,
     NgbModule,
+    ModalsModule,
     ToastrModule.forRoot()
   ],
   declarations: [
