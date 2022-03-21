@@ -26,6 +26,8 @@
                                         <!-- <td>{{row.referrer_id}}</td> -->
                                         <td>{{row.referrer}}</td>
                                         <td>{{row.price}} €</td>
+                                        <td><button type="button" (click)="new_event(row.training_id)" class="btn btn-info btn-fill pull-left">Weiteren Termin</button></td>
+                                        <!-- <td><new-event-modal></new-event-modal></td> -->
                                     </tr>
                                 </tbody>
                           </table>
@@ -34,7 +36,7 @@
                 </div>
             </div>            
         </div>
-        
+
         <div class="row">
             <div class="col-md-12">
                 <div class="card">

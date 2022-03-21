@@ -6,9 +6,9 @@ import { TablesComponent } from '../../framework_components/tables/tables.compon
 import { TypographyComponent } from '../../framework_components/typography/typography.component';
 import { IconsComponent } from '../../framework_components/icons/icons.component';
 import { MapsComponent } from '../../framework_components/maps/maps.component';
-import { NotificationsComponent } from '../../framework_components/notifications/notifications.component';
 import { UpgradeComponent } from '../../framework_components/upgrade/upgrade.component';
 import { TrainingsComponent } from 'app/components/trainings/trainings.component';
+import { NotificationsComponent } from 'app/framework_components/notifications/notifications.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'trainings',      component: TrainingsComponent },

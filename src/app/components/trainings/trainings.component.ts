@@ -1,4 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { NewEventModal2 } from 'app/modals/new_event/new_event_modal2';
 import { GetBookingsService } from 'app/services/api/get-bookings.service';
 import { booking_event, GetEventsOfTrainingService } from 'app/services/api/get-events-of-training.service';
 import { GetReferrerService } from 'app/services/api/get-referrer.service';
@@ -53,6 +55,7 @@ export class TrainingsComponent implements OnInit, OnDestroy {
     public putBookingService: PutBookingService,
     public getBookingsService: GetBookingsService,
     public notificationService: NotificationService,
+    public dialog: MatDialog,
     public helper: HelperFunctionsService
   ) 
   { 
@@ -170,6 +173,18 @@ export class TrainingsComponent implements OnInit, OnDestroy {
     })
   }
 
+  new_event(training_id:number)
+  {
+    // this.new_event_modal.open({});
+    let modalRef = this.dialog.open(NewEventModal2, {
+      width: "50vw",
+      ariaLabelledBy: 'modal-basic-title'
+    });
+
+    
+
+  }
+
   book_event(event_id:number)
   {
     // console.log("book_training ",event_id);
@@ -187,5 +202,7 @@ export class TrainingsComponent implements OnInit, OnDestroy {
       this.updateEventTable();
     })
   }
+
+
 
 }
