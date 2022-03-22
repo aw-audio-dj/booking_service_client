@@ -9,7 +9,6 @@ import { GetReferrerService } from 'src/app/services/api/get-referrer.service';
 import { training, GetTrainingsService } from 'src/app/services/api/get-trainings.service';
 import { PutBookingService, putBookingCallback } from 'src/app/services/api/put-booking.service';
 import { putEventCallback, PutEventService } from 'src/app/services/api/put-event.service';
-import { PutTrainingService } from 'src/app/services/api/put-training.service';
 import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
 import { NotificationService } from 'src/app/services/notification.service';
 
@@ -102,7 +101,7 @@ export class TrainingsComponent implements OnInit, OnDestroy {
   initEventTable():void
   {
     this.tableEvents = {
-      headerRow: [ 'ID', 'Datum', 'Schulung', 'Max Teilnehmer' , 'Freie Plätze' , 'Buchen'],
+      headerRow: [ 'ID', 'Datum', 'Schulung', 'Max Teilnehmer' , 'Freie Plätze' ],
       dataRows: new BehaviorSubject(null)
     }
     this.updateEventTable();
