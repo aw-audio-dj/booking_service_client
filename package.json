@@ -39,6 +39,7 @@
     "jw-bootstrap-switch-ng2": "2.0.5",
     "mocha": "^9.2.2",
     "ng2-charts": "^3.0.8",
+    "ngx-bootstrap": "^8.0.0",
     "ngx-toastr": "13.2.0",
     "node": "16.14",
     "nouislider": "14.6.3",

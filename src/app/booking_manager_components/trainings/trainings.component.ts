@@ -13,14 +13,6 @@ import { PutTrainingService } from 'src/app/services/api/put-training.service';
 import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
 import { NotificationService } from 'src/app/services/notification.service';
 
-
-
-
-
-// declare interface TableData {
-//   headerRow: string[];
-//   dataRows: string[][];
-// }
 export interface TableTrainingsData {
   headerRow: string[];
   dataRows: BehaviorSubject<training_table_row[]>;
@@ -47,12 +39,8 @@ interface booking_event_row extends booking_event {
 })
 export class TrainingsComponent implements OnInit, OnDestroy {
   // VARS
-  // public tableTrainings: TableData;
   public tableTrainings: TableTrainingsData;
   public tableEvents: TableEventsData;
-
-  // public myTableDataObservable = new BehaviorSubject(null);
-  // public myTableDataObservable : Subscription;
 
   constructor(
     public getTrainingsService: GetTrainingsService,
@@ -72,26 +60,6 @@ export class TrainingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void
   {
-    // this.getTrainingsService.call();
-
-    // this.getTrainingsService.call_as_observerable().subscribe((callback:Array<training>) => {
-    //   console.log("> trainings(2) ",callback)
-    // });
-
-    // this.getEventsOfTrainingService.call(1);
-    // this.getEventsOfTrainingService.call_as_observerable(1).subscribe((callback:Array<booking_event>) => {
-    //   try
-    //   {
-    //     console.log("> event(s)2 ",callback);
-    //   }
-    //   catch (error)
-    //   {
-    //     console.log(error)
-    //   }
-
-
-    // })
-
     this.initTrainingTable();
     this.initEventTable();
   }
@@ -100,17 +68,16 @@ export class TrainingsComponent implements OnInit, OnDestroy {
 
   }
 
-  initTrainingTable()
+  initTrainingTable():void
   {
     this.tableTrainings = {
       headerRow: [ 'ID', 'Name', 'Beschreibung', 'Dozent', 'Preis'],
       dataRows: new BehaviorSubject(null)
     }
-    // this.tableTrainings.dataRows = this.getTrainingsService.test_trainings
     this.updateTrainingTable();
   }
 
-  updateTrainingTable()
+  updateTrainingTable():void
   {
     this.getTrainingsService.call_as_observerable()
     .pipe
@@ -132,7 +99,7 @@ export class TrainingsComponent implements OnInit, OnDestroy {
     })
   }
 
-  initEventTable()
+  initEventTable():void
   {
     this.tableEvents = {
       headerRow: [ 'ID', 'Datum', 'Schulung', 'Max Teilnehmer' , 'Freie Plätze' , 'Buchen'],
@@ -141,7 +108,7 @@ export class TrainingsComponent implements OnInit, OnDestroy {
     this.updateEventTable();
   }
 
-  updateEventTable()
+  updateEventTable():void
   {
     this.tableTrainings.dataRows.subscribe((training_table_data:training_table_row[]) => {
       let newDataRows : booking_event_row[] = [];
@@ -180,28 +147,24 @@ export class TrainingsComponent implements OnInit, OnDestroy {
     let modalData : ModalData = {training_id: training_id}
     modalRef.componentInstance.data = modalData;
     modalRef.componentInstance.afterOkpressed.subscribe( async (modal:NewEventModal) => {
-      let training_date = new Date();
-      training_date.setFullYear(modal.anlegenForm.controls.versammlungsdatum.value.year)
-      training_date.setMonth(modal.anlegenForm.controls.versammlungsdatum.value.month-1)
-      training_date.setDate(modal.anlegenForm.controls.versammlungsdatum.value.day)
-      console.log("ok pressed ", (modal.anlegenForm.controls) , training_date)
-      // let putEventCallback: putEventCallback = await this.putEventService.call_as_observerable(training_id,training_date).toPromise();
-      // console.log("putEventCallback ",putEventCallback)
-      // if(putEventCallback.message.includes("insert event successful"))
-      // {
-      //   // Sucesss
-      //   this.notificationService.showNotification('bottom','center', 'Neuer Schulungs-Termin angelegt!',2);
-      // }
-      // else
-      // {
-      //   // Error
-      //   this.notificationService.showNotification('bottom','center', 'Aktion verlief fehlerhaft!',4);
-      // }
-      // this.updateEventTable();
+      // console.log("ok pressed ", (modal.anlegenForm.controls) , modal.getSelectedDate())
+      let putEventCallback: putEventCallback = await this.putEventService.call_as_observerable(training_id, modal.getEventDate()).toPromise();
+      console.log("putEventCallback ",putEventCallback)
+      if(putEventCallback.message.includes("insert event successful"))
+      {
+        // Sucesss
+        this.notificationService.showNotification('bottom','center', 'Neuer Schulungs-Termin angelegt!',2);
+      }
+      else
+      {
+        // Error
+        this.notificationService.showNotification('bottom','center', 'Aktion verlief fehlerhaft!',4);
+      }
+      this.updateEventTable();
     })
   }
 
-  book_event(event_id:number)
+  book_event(event_id:number):void
   {
     // console.log("book_training ",event_id);
     this.putBookingService.call_as_observerable(event_id)

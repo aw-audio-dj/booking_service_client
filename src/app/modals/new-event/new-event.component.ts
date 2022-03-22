@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbModal, ModalDismissReasons,NgbDatepicker, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import {  NgbActiveModal   } from '@ng-bootstrap/ng-bootstrap';
 
 
 declare interface ModalTexte {
@@ -11,13 +11,18 @@ declare interface ModalTexte {
 export interface ModalData{
   training_id: number
 }
-export interface veranstaltungs_datum{
+export interface event_date{
   year: number,
   month: number,
   day: number,
   hour?: number,
   minute?: number,
   second?: number
+}
+export interface event_time{
+  hour: number,
+  minute: number,
+  second: number
 }
 
 @Component({
@@ -86,14 +91,34 @@ export class NewEventModal implements OnInit ,AfterViewInit {
 
   initForms()
   {
-    this.anlegenForm = this.fb.group({
-      // versammlungsbeginn: new FormControl ({hour: 13, minute: 30, second: 0} , [Validators.required,Validators.minLength(1)]),
-      versammlungsdatum: new FormControl ({},  [Validators.required,Validators.minLength(1)]),
-    });
     const today = new Date();
-    // this.anlegenForm['versammlungsbeginn'] = {hour: today.getHours(), minute: today.getMinutes(), second: today.getSeconds()};
-    this.anlegenForm.get('versammlungsdatum').setValue(new Date().toLocaleDateString());
-    console.log("init forms ",this.anlegenForm)
+    let event_date: event_date = {
+      year: today.getFullYear(),
+      month: (today.getMonth()+1),
+      day: today.getDate()
+    }
+    let event_time: event_time = {
+      hour: today.getHours(),
+      minute: today.getMinutes(),
+      second: today.getSeconds()
+    }
+    this.anlegenForm = this.fb.group({
+      event_date: new FormControl (event_date,  [Validators.required,Validators.minLength(1)]),
+      event_time: new FormControl (event_time,  [Validators.required,Validators.minLength(1)]),
+    });
+    // console.log("init forms ",this.anlegenForm)
+  }
+
+  public getEventDate():Date
+  {
+    let training_date = new Date();
+    training_date.setFullYear(this.anlegenForm.controls.event_date.value.year)
+    training_date.setMonth(this.anlegenForm.controls.event_date.value.month-1)
+    training_date.setDate(this.anlegenForm.controls.event_date.value.day);
+    training_date.setHours(this.anlegenForm.controls.event_time.value.hour);
+    training_date.setMinutes(this.anlegenForm.controls.event_time.value.minute);
+    training_date.setSeconds(this.anlegenForm.controls.event_time.value.second);
+    return training_date;
   }
 
   public ok_click()

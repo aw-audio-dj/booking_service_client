@@ -1,7 +1,8 @@
 import { NgModule } from "@angular/core";
-import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
-import { NgbDatepickerModule, NgbModalModule } from "@ng-bootstrap/ng-bootstrap";
+import { FormBuilder, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgbDatepickerModule, NgbModalModule, NgbTimepicker, NgbTimepickerModule } from "@ng-bootstrap/ng-bootstrap";
 import { NewEventModal } from "./new-event/new-event.component";
+// import {Tooltip} from "ngx-bootstrap";
 
 
 const customModals = [
@@ -17,7 +18,7 @@ const customModals = [
       // BrowserModule,
       ReactiveFormsModule,
       NgbDatepickerModule,
-      NgbModalModule
+      NgbModalModule,NgbTimepickerModule,FormsModule
     ],
     declarations: [
       customModals

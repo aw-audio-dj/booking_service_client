@@ -8,14 +8,34 @@
         <div class="input-group">
           <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp"
           ngbDatepicker #dp="ngbDatepicker"
-          formControlName="versammlungsdatum"
-          [navigation]="none"
+          formControlName="event_date"
           >
-          <!-- [(ngModel)]="anlegenForm.versammlungsdatum" -->
+          <!-- [(ngModel)]="anlegenForm.event_date" -->
           <!-- <button class="btn btn-secondary calendar" (click)="dp.toggle()" type="button">Auswahl</button> -->
           <button class="ngbtn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
         </div>
       </div>
+      <label for="dateOfBirth" class="pb-0">Uhrzeit</label>
+      <ngb-timepicker formControlName="event_time"></ngb-timepicker>
+
+      <!-- <div class="row">
+        <div class="col-xs-12 col-12 col-md-4 form-group">
+          <input type="text"
+                 placeholder="Datepicker"
+                 class="form-control"
+                 [bsConfig]="{withTimepicker: true, rangeInputFormat : 'MMMM Do YYYY, h:mm:ss a', dateInputFormat: 'MMMM Do YYYY, h:mm:ss a'}"
+                 bsDatepicker>
+        </div>
+        <div class="col-xs-12 col-12 col-md-4 form-group">
+          <input type="text"
+                 placeholder="Daterangepicker"
+                 class="form-control"
+                 [bsConfig]="{withTimepicker: true, rangeInputFormat : 'MMMM Do YYYY, h:mm:ss a', dateInputFormat: 'MMMM Do YYYY, h:mm:ss a'}"
+                 bsDaterangepicker>
+            <ngb-timepicker [(ngModel)]="mytime"></ngb-timepicker>
+        </div>
+      </div> -->
+
     </form>
   </div>
   <div class="modal-footer">
