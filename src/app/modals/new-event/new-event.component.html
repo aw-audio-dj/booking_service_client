@@ -7,9 +7,11 @@
         <label for="dateOfBirth">Datum</label>
         <div class="input-group">
           <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp"
-          ngbDatepicker #dp="ngbDatepicker" [(ngModel)]="anlegenForm.versammlungsdatum"
+          ngbDatepicker #dp="ngbDatepicker"
           formControlName="versammlungsdatum"
+          [navigation]="none"
           >
+          <!-- [(ngModel)]="anlegenForm.versammlungsdatum" -->
           <!-- <button class="btn btn-secondary calendar" (click)="dp.toggle()" type="button">Auswahl</button> -->
           <button class="ngbtn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
         </div>

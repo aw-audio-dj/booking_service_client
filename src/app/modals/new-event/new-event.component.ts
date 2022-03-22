@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons,NgbDatepicker, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 
@@ -48,11 +48,14 @@ export class NewEventModal implements OnInit ,AfterViewInit {
     public activeModal: NgbActiveModal,
     private fb: FormBuilder
     )
-  {}
+  {
+    this.initForms();
+  }
+
   ngOnInit(): void
   {
     console.log("ModalData ",this.data);
-    this.initForms();
+
     this.onInit.emit(this);
   }
 
@@ -84,14 +87,13 @@ export class NewEventModal implements OnInit ,AfterViewInit {
   initForms()
   {
     this.anlegenForm = this.fb.group({
-      versammlungsbeginn: [{hour: 13, minute: 30, second: 0} ],
-      versammlungsdatum: [new Date().toLocaleDateString() ],
+      // versammlungsbeginn: new FormControl ({hour: 13, minute: 30, second: 0} , [Validators.required,Validators.minLength(1)]),
+      versammlungsdatum: new FormControl ({},  [Validators.required,Validators.minLength(1)]),
     });
     const today = new Date();
-    this.anlegenForm['versammlungsbeginn'] = {hour: today.getHours(), minute: today.getMinutes(), second: today.getSeconds()};
-    setTimeout(() => {
-      this.anlegenForm.get('versammlungsdatum').setValue(new Date().toLocaleDateString());
-    }, 500);
+    // this.anlegenForm['versammlungsbeginn'] = {hour: today.getHours(), minute: today.getMinutes(), second: today.getSeconds()};
+    this.anlegenForm.get('versammlungsdatum').setValue(new Date().toLocaleDateString());
+    console.log("init forms ",this.anlegenForm)
   }
 
   public ok_click()
@@ -101,7 +103,7 @@ export class NewEventModal implements OnInit ,AfterViewInit {
       this.activeModal.dismiss();
   }
 
-  public cancel_click(modal: NewEventModal)
+  public cancel_click()
   {
       this.afterCancelpressed.emit(this);
       this.activeModal.dismiss();

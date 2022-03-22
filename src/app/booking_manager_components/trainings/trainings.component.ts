@@ -184,20 +184,20 @@ export class TrainingsComponent implements OnInit, OnDestroy {
       training_date.setFullYear(modal.anlegenForm.controls.versammlungsdatum.value.year)
       training_date.setMonth(modal.anlegenForm.controls.versammlungsdatum.value.month-1)
       training_date.setDate(modal.anlegenForm.controls.versammlungsdatum.value.day)
-      // console.log("ok pressed ", (modal.anlegenForm.controls.versammlungsdatum.value) , training_date)
-      let putEventCallback: putEventCallback = await this.putEventService.call_as_observerable(training_id,training_date).toPromise();
-      console.log("putEventCallback ",putEventCallback)
-      if(putEventCallback.message.includes("insert event successful"))
-      {
-        // Sucesss
-        this.notificationService.showNotification('bottom','center', 'Neuer Schulungs-Termin angelegt!',2);
-      }
-      else
-      {
-        // Error
-        this.notificationService.showNotification('bottom','center', 'Aktion verlief fehlerhaft!',4);
-      }
-      this.updateEventTable();
+      console.log("ok pressed ", (modal.anlegenForm.controls) , training_date)
+      // let putEventCallback: putEventCallback = await this.putEventService.call_as_observerable(training_id,training_date).toPromise();
+      // console.log("putEventCallback ",putEventCallback)
+      // if(putEventCallback.message.includes("insert event successful"))
+      // {
+      //   // Sucesss
+      //   this.notificationService.showNotification('bottom','center', 'Neuer Schulungs-Termin angelegt!',2);
+      // }
+      // else
+      // {
+      //   // Error
+      //   this.notificationService.showNotification('bottom','center', 'Aktion verlief fehlerhaft!',4);
+      // }
+      // this.updateEventTable();
     })
   }
 
