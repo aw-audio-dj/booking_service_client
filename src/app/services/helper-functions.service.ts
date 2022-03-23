@@ -7,12 +7,12 @@ export class HelperFunctionsService {
 
   constructor(
 
-  ) 
-  { 
+  )
+  {
 
   }
 
-  isJson(obj:string) 
+  isJson(obj:string)
   {
     var t = typeof obj;
     return ['boolean', 'number', 'string', 'symbol', 'function'].indexOf(t) == -1;
@@ -23,7 +23,7 @@ export class HelperFunctionsService {
     var firstShot = typeof object_;
     if (firstShot !== 'object') {
         return firstShot;
-    } 
+    }
     else if (object_.constructor === [].constructor) {
         return 'array';
     }
@@ -35,13 +35,13 @@ export class HelperFunctionsService {
     }
     else {
         return 'don\'t know';
-    } 
+    }
   }
 
   germanTime(date_:Date)
   {
     let uhrzeit = ``;
-    try 
+    try
     {
       let mydate = new Date(date_);
       uhrzeit = mydate.getHours()+":"+(mydate.getMinutes() < 10 ? "0"+mydate.getMinutes() : mydate.getMinutes() )+" Uhr";
@@ -53,7 +53,7 @@ export class HelperFunctionsService {
   }
 
   germanTimeFormat(time:Date)
-  {        
+  {
     let monat = (((time.getMonth())+1) < 10) ? "0"+((time.getMonth())+1): ((time.getMonth())+1);
     let stunde = time.getHours() < 10 ? "0"+time.getHours() : time.getHours();
     let minute = time.getMinutes() < 10 ? "0"+time.getMinutes() : time.getMinutes();
@@ -62,13 +62,13 @@ export class HelperFunctionsService {
   }
 
   germanDateFormat(time:Date)
-  {        
+  {
     let monat = (((time.getMonth())+1) < 10) ? "0"+((time.getMonth())+1): ((time.getMonth())+1);
     return (time.getDate())+"."+monat+"."+time.getFullYear();
   }
 
   germanDateFormatWithTime(time:Date)
-  {        
+  {
     let monat = (((time.getMonth())+1) < 10) ? "0"+((time.getMonth())+1): ((time.getMonth())+1);
     return (time.getDate())+"."+monat+"."+time.getFullYear()+ " um "+this.germanTime(time);
   }

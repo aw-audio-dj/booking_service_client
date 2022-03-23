@@ -21,14 +21,14 @@ export class GetTrainingsService {
   public trainings_src = new BehaviorSubject(null);
   public trainings__observable = this.trainings_src.asObservable();
   public test_trainings: ReplaySubject<training[]> = new ReplaySubject<training[]>(1);
-  
+
 
   constructor(
     public conManager: ConnectionManagerService,
     public http : HttpClient,
     private helper: HelperFunctionsService,
 
-  ) 
+  )
   {
     const trainingsPrefill:training = {training_id: 0,name: "Bitte Objekt auswählen", description:"test",price: 123.44,referrer_id:1};
     this.test_trainings.next([trainingsPrefill])
@@ -42,27 +42,15 @@ export class GetTrainingsService {
     // console.log("headers ",headers)
     this.http.get(url, { headers: headers, responseType: response_type.JSON})
     .subscribe((callback:Array<training>) => {
-      try 
+      try
       {
-        // console.log("> callback ",callback);
-        // if(this.helper.isJson2(callback) == 'string')
-        // {
-        //   let trainings2 : Array<training> = JSON.parse(callback);
-        //   console.log("> trainings ",trainings2);
-        //   this.trainings_src.next(trainings2);
-        //   this.test_trainings.next(trainings2)
-        // }
-        console.log("> trainings ",callback);
         this.trainings_src.next(callback);
         this.test_trainings.next(callback)
-
-      } 
-      catch (error) 
+      }
+      catch (error)
       {
         console.log(error)
       }
-      
-      
     })
   }
 
@@ -70,9 +58,7 @@ export class GetTrainingsService {
   {
     const url = `${this.conManager.getApiServerPath()}/${api_calls.getTrainings}`;
     const headers = this.conManager.createHttpHeader(content_types.TEXT, crud.GET);
-   
     return this.http.get<training[]>(url, { headers: headers, responseType: response_type.JSON})
-   
   }
 
 }

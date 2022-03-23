@@ -22,8 +22,6 @@ export class PutTrainingService {
   {
     const url = `${this.conManager.getApiServerPath()}/${api_calls.putTraining}`;
     const headers = this.conManager.createHttpHeader(content_types.TEXT, crud.GET);
-
     return this.http.put<putTrainingCallback>(url, { headers: headers, responseType: response_type.JSON})
-
   }
 }

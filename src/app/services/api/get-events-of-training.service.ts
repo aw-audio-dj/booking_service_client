@@ -11,7 +11,6 @@ export interface booking_event{
   maxAttendees: number,
 }
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -22,8 +21,8 @@ export class GetEventsOfTrainingService {
   constructor(
     public conManager: ConnectionManagerService,
     public http : HttpClient,
-  ) 
-  { 
+  )
+  {
 
   }
 
@@ -31,30 +30,17 @@ export class GetEventsOfTrainingService {
   {
     const url = `${this.conManager.getApiServerPath()}/${api_calls.getEventsOfTraining}/${training_id}`;
     const headers = this.conManager.createHttpHeader(content_types.TEXT, crud.GET);
-   
+
     this.http.get(url, { headers: headers, responseType: response_type.JSON})
     .subscribe((callback:Array<booking_event>) => {
-      try 
+      try
       {
-        // console.log("> callback ",callback);
-        // if(this.helper.isJson2(callback) == 'string')
-        // {
-        //   let trainings2 : Array<training> = JSON.parse(callback);
-        //   console.log("> trainings ",trainings2);
-        //   this.trainings_src.next(trainings2);
-        //   this.test_trainings.next(trainings2)
-        // }
-        console.log("> event(s) ",callback);
         this.events_src.next(callback);
-        // this.test_trainings.next(callback)
-
-      } 
-      catch (error) 
+      }
+      catch (error)
       {
         console.log(error)
       }
-      
-      
     })
   }
 
@@ -62,8 +48,6 @@ export class GetEventsOfTrainingService {
   {
     const url = `${this.conManager.getApiServerPath()}/${api_calls.getEventsOfTraining}/${training_id}`;
     const headers = this.conManager.createHttpHeader(content_types.TEXT, crud.GET);
-   
     return this.http.get<booking_event[]>(url, { headers: headers, responseType: response_type.JSON})
-   
   }
 }

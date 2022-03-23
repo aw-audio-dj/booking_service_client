@@ -11,25 +11,8 @@ import { PutBookingService, putBookingCallback } from 'src/app/services/api/put-
 import { putEventCallback, PutEventService } from 'src/app/services/api/put-event.service';
 import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { TableTrainingsData, TableEventsData, SharedService, training_table_row, booking_event_row } from '../shared.service';
 
-export interface TableTrainingsData {
-  headerRow: string[];
-  dataRows: BehaviorSubject<training_table_row[]>;
-}
-
-interface training_table_row extends training {
-  referrer: string
-}
-
-export interface TableEventsData{
-  headerRow: string[],
-  dataRows: BehaviorSubject<booking_event_row[]>;
-}
-
-interface booking_event_row extends booking_event {
-  training_name: string,
-  free_bookings: number
-}
 
 @Component({
   selector: 'app-trainings',
@@ -42,20 +25,20 @@ export class TrainingsComponent implements OnInit, OnDestroy {
   public tableEvents: TableEventsData;
 
   constructor(
-    public getTrainingsService: GetTrainingsService,
-    public getEventsOfTrainingService: GetEventsOfTrainingService,
-    public getReferrerService: GetReferrerService,
-    public putBookingService: PutBookingService,
-    public getBookingsService: GetBookingsService,
-    public putEventService: PutEventService,
+    public getTrainings: GetTrainingsService,
+    public getEventsOfTraining: GetEventsOfTrainingService,
+    public getReferrer: GetReferrerService,
+    public putBooking: PutBookingService,
+    public getBookings: GetBookingsService,
+    public putEvent: PutEventService,
     public notificationService: NotificationService,
     public modalService: NgbModal,
-    public helper: HelperFunctionsService
+    public helper: HelperFunctionsService,
+    public shared: SharedService
   )
   {
 
   }
-
 
   ngOnInit(): void
   {
@@ -64,7 +47,6 @@ export class TrainingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-
   }
 
   initTrainingTable():void
@@ -78,18 +60,17 @@ export class TrainingsComponent implements OnInit, OnDestroy {
 
   updateTrainingTable():void
   {
-    this.getTrainingsService.call_as_observerable()
+    this.getTrainings.call_as_observerable()
     .pipe
     (
       map((_trainings:Array<training>) => {
         _trainings
         .map(async (training_row:training_table_row)=>{
-          // const referrer_ = await this.getReferrerService.call_as_promise(tr.referrer_id)
-          const referrer_ = await this.getReferrerService.call_as_observerable(training_row.referrer_id).toPromise();
-          // console.log("|||| ",referrer_);
+          const referrer_ = await this.getReferrer.call_as_observerable(training_row.referrer_id).toPromise();
           training_row.referrer = referrer_[0].surname+" "+referrer_[0].lastname;
           return training_row;
         })
+        .sort(this.shared.sortTrainingArray)
         return _trainings;
       })
     )
@@ -115,7 +96,7 @@ export class TrainingsComponent implements OnInit, OnDestroy {
       {
         if (Object.prototype.hasOwnProperty.call(training_table_data, key)) {
           const row = training_table_data[key];
-          this.getEventsOfTrainingService.call_as_observerable(row.training_id)
+          this.getEventsOfTraining.call_as_observerable(row.training_id)
           .pipe
           (
             map( (_booking_events:Array<booking_event>) => {
@@ -123,15 +104,15 @@ export class TrainingsComponent implements OnInit, OnDestroy {
               .map(async (event_row:booking_event_row)=>{
                 event_row.training_name = row.name;
                 event_row.date = this.helper.germanDateFormatWithTime(new Date(event_row.date));
-                event_row.free_bookings = event_row.maxAttendees - await (await this.getBookingsService.call_as_observerable(event_row.event_id).toPromise()).length;
+                event_row.free_bookings = event_row.maxAttendees - await (await this.getBookings.call_as_observerable(event_row.event_id).toPromise()).length;
                 return event_row;
               })
+              .sort(this.shared.sortEventArray)
               return _booking_events;
             })
 
           )
           .subscribe( (callback:booking_event_row[]) => {
-            // console.log("> event(3) ",callback);
             newDataRows = newDataRows.concat(callback);
             this.tableEvents.dataRows.next(newDataRows);
           })
@@ -146,8 +127,7 @@ export class TrainingsComponent implements OnInit, OnDestroy {
     let modalData : ModalData = {training_id: training_id}
     modalRef.componentInstance.data = modalData;
     modalRef.componentInstance.afterOkpressed.subscribe( async (modal:NewEventModal) => {
-      // console.log("ok pressed ", (modal.anlegenForm.controls) , modal.getSelectedDate())
-      let putEventCallback: putEventCallback = await this.putEventService.call_as_observerable(training_id, modal.getEventDate()).toPromise();
+      let putEventCallback: putEventCallback = await this.putEvent.call_as_observerable(training_id, modal.getEventDate()).toPromise();
       console.log("putEventCallback ",putEventCallback)
       if(putEventCallback.message.includes("insert event successful"))
       {
@@ -165,10 +145,8 @@ export class TrainingsComponent implements OnInit, OnDestroy {
 
   book_event(event_id:number):void
   {
-    // console.log("book_training ",event_id);
-    this.putBookingService.call_as_observerable(event_id)
+    this.putBooking.call_as_observerable(event_id)
     .subscribe((callback: putBookingCallback) => {
-      // console.log("put_booking ",callback);
       if(callback.message.includes("insert booking successful"))
       {
         this.notificationService.showNotification('bottom','center', 'Buchung erfolgreich!',2);

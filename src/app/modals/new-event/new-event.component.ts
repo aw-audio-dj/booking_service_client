@@ -102,7 +102,6 @@ export class NewEventModal implements OnInit ,AfterViewInit {
   public ok_click()
   {
       this.afterOkpressed.emit(this);
-      // this.modalService.dismissAll();
       this.activeModal.dismiss();
   }
 
@@ -110,8 +109,6 @@ export class NewEventModal implements OnInit ,AfterViewInit {
   {
       this.afterCancelpressed.emit(this);
       this.activeModal.dismiss();
-      // this.content.dismissAll();
-      // modal.dismiss('Cross click')
   }
 
 

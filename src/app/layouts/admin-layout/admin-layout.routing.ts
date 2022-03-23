@@ -9,10 +9,12 @@ import { MapsComponent } from '../../framework_components/maps/maps.component';
 import { NotificationsComponent } from '../../framework_components/notifications/notifications.component';
 import { UpgradeComponent } from '../../framework_components/upgrade/upgrade.component';
 import { TrainingsComponent } from 'src/app/booking_manager_components/trainings/trainings.component';
+import { EventsComponent } from 'src/app/booking_manager_components/events/events.component';
 
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'trainings',      component: TrainingsComponent },
+    { path: 'events',         component: EventsComponent },
     { path: 'dashboard',      component: DashboardComponent },
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },

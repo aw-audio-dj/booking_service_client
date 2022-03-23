@@ -20,8 +20,8 @@ export class GetReferrerService {
   constructor(
     public conManager: ConnectionManagerService,
     public http : HttpClient,
-  ) 
-  { 
+  )
+  {
 
   }
 
@@ -29,9 +29,7 @@ export class GetReferrerService {
   {
     const url = `${this.conManager.getApiServerPath()}/${api_calls.getReferrer}/${referrer_id}`;
     const headers = this.conManager.createHttpHeader(content_types.TEXT, crud.GET);
-   
     return this.http.get<referrer[]>(url, { headers: headers, responseType: response_type.JSON})
-   
   }
 
   call_as_promise(referrer_id:number = 0):Promise<referrer[]>
@@ -40,6 +38,5 @@ export class GetReferrerService {
     const headers = this.conManager.createHttpHeader(content_types.TEXT, crud.GET);
     const promise = this.http.get<referrer[]>(url, { headers: headers, responseType: response_type.JSON}).toPromise();
     return promise;
-   
   }
 }

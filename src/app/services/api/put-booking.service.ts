@@ -23,8 +23,8 @@ export class PutBookingService {
   constructor(
     public conManager: ConnectionManagerService,
     public http : HttpClient,
-  ) 
-  { 
+  )
+  {
 
   }
 
@@ -32,8 +32,6 @@ export class PutBookingService {
   {
     const url = `${this.conManager.getApiServerPath()}/${api_calls.putBooking}/${event_id}`;
     const headers = this.conManager.createHttpHeader(content_types.TEXT, crud.PUT);
-   
     return this.http.put<putBookingCallback>(url, { headers: headers, responseType: response_type.JSON})
-   
   }
 }

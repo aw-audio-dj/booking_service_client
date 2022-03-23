@@ -28,6 +28,5 @@ export class PutEventService {
     const headers = this.conManager.createHttpHeader(content_types.APPLICATION_JSON, crud.PUT);
     const data:putEventData = {training_id: training_id, date: date };
     return this.http.put<putEventCallback>(url, { headers: headers , arguments: data, responseType: response_type.JSON })
-
   }
 }
