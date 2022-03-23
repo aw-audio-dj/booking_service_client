@@ -1,6 +1,7 @@
 # Booking Example Angular Client
 
-Foobar is a Python library for dealing with word pluralization.
+A simple Angular Bootstrap Frontend in combination with Node and Express Server to show REST API calls . 
+`https://github.com/aw-audio-dj/booking_service_server`
 
 ## Installation
 
@@ -12,7 +13,7 @@ Foobar is a Python library for dealing with word pluralization.
 
 ## Usage
 * Start the Server by download this repo 
-`https://github.com/aw-audio-dj/booking_service_server`
+
 * Open this Project, open Terminal (via VS-Code) and perform
 ```bash
 npm install
