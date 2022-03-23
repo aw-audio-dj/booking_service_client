@@ -14,11 +14,11 @@ A simple Angular Bootstrap Frontend in combination with Node and Express Server 
 ## Usage
 * Start the Server by download this repo 
 
-* Open this Project, open Terminal (via VS-Code) and perform
+* Open this Project in VS Code, open Terminal and perform
 ```bash
 npm install
 ```
-* Start the DEV Server via which will run in Port 4211
+* Start the DEV Server which will run in Port 4211 via
 ```bash
 npm run start2
 ```
