@@ -3,6 +3,8 @@
 A simple Angular Bootstrap Frontend in combination with Node and Express Server to show REST API calls . 
 `https://github.com/aw-audio-dj/booking_service_server`
 
+This Free Frontend is based on `https://www.creative-tim.com/product/now-ui-dashboard`
+
 ## Installation
 
 * Download this Repo
