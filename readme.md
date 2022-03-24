@@ -18,7 +18,7 @@ A simple Angular Bootstrap Frontend in combination with Node and Express Server 
 ```bash
 npm install
 ```
-* Start the DEV Server which will run in Port 4211 via
+* Start the DEV Server which will run on Port 4211 via
 ```bash
 npm run start2
 ```
